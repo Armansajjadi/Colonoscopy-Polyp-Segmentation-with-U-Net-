@@ -89,7 +89,7 @@ After **30 epochs**, the model achieved:
 - **Final Test Loss**: 📉 **0.16**
 
 **Training History**  
-![Training and Validation](assets/trainHistoryAndvalidationHistorychart.png)
+![Training and Validation](assets/chart.png)
 
 **Sample Predictions**  
-![Model Predictions](assets/modelPredictionSample.png)
+![Model Predictions](assets/modelPrediction.png)
