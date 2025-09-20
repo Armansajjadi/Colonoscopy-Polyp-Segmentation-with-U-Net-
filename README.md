@@ -1,84 +1,96 @@
-# Colonoscopy Polyp Segmentation using U-Net++ and PyTorch
+# 🩺 Colonoscopy Polyp Segmentation using U-Net++ and PyTorch
 
-This project implements a deep learning pipeline to automatically segment polyps from colonoscopy images. The model uses the **U-Net++** architecture with a pre-trained **EfficientNet-B3** encoder, built with PyTorch and the `segmentation-models-pytorch` library.
+![Python](https://img.shields.io/badge/Python-3.10-blue?logo=python)
+![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?logo=pytorch&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green)
+![Status](https://img.shields.io/badge/Status-Completed-brightgreen)
 
-`Screenshot 2025-09-20 201828.png`
+This project implements a **deep learning pipeline** to automatically **segment polyps from colonoscopy images**.  
+It leverages the **U-Net++** architecture with a pre-trained **EfficientNet-B3** encoder, built using PyTorch and the `segmentation-models-pytorch` library.
 
------
+---
 
-## Table of Contents
+## 📑 Table of Contents
+- [Project Description](#-project-description)
+- [Dataset](#-dataset)
+- [Key Technologies](#-key-technologies)
+- [Model Architecture](#-model-architecture)
+- [Usage Workflow](#-usage-workflow)
+- [Results](#-results)
 
-  - [Project Description]
-  - [Dataset]
-  - [Key Technologies]
-  - [Model Architecture]
-  - [Usage Workflow]
-  - [Results]
+---
 
------
+## 🧾 Project Description
 
-## Project Description
+Colorectal cancer is one of the leading causes of cancer-related deaths. **Polyps**, as precursors, play a critical role in early detection and prevention.  
+The goal of this project is to build a **robust segmentation model** for polyp identification, helping medical professionals detect anomalies more efficiently.  
 
-The goal of this project is to create an accurate and robust segmentation model for identifying polyps, which are crucial precursors to colorectal cancer. By automating their detection, this tool can serve as a valuable aid for medical professionals. The entire workflow, from data loading and augmentation to training, evaluation, and visualization, is documented in the `Colonoscopy Polyp Segmentation.ipynb` notebook.
+The full pipeline — from **data loading and augmentation to training, evaluation, and visualization** — is documented in the notebook:  
+📓 `Colonoscopy Polyp Segmentation.ipynb`
 
------
+---
 
-## Dataset
+## 📂 Dataset
 
-This project uses the [Kvasir-SEG](https://datasets.simula.no/kvasir-seg/) dataset, a collection of 1000 polyp images and their corresponding ground truth segmentation masks. The metadata, including bounding boxes, is provided in a JSON file.
+This project uses the **[Kvasir-SEG](https://datasets.simula.no/kvasir-seg/)** dataset:  
+- **1000 colonoscopy images** with corresponding **segmentation masks**  
+- Additional metadata (bounding boxes) in a JSON file  
 
-`Screenshot 2025-09-20 201754.png`
+**Sample Data**  
+![Dataset sample](assets/DataSetSample.png)
 
------
+---
 
-## Key Technologies
+## 🛠️ Key Technologies
 
-  - **Deep Learning Framework**: `PyTorch`
-  - **Model Architecture**: `segmentation-models-pytorch` for U-Net++ with an EfficientNet-B3 backbone.
-  - **Data Augmentation**: `Albumentations` for robust image and mask transformations.
-  - **Data Handling**: `pandas` and `NumPy`.
-  - **Utilities**: `scikit-learn` for data splitting, `matplotlib` for plotting, and `tqdm` for progress bars.
+- **Deep Learning**: `PyTorch`, `segmentation-models-pytorch`  
+- **Architecture**: U-Net++ with EfficientNet-B3 backbone  
+- **Augmentation**: `Albumentations`  
+- **Data Handling**: `pandas`, `NumPy`  
+- **Visualization**: `matplotlib`  
+- **Utilities**: `scikit-learn`, `tqdm`  
 
------
+---
 
-## Model Architecture
+## 🏗️ Model Architecture
 
-The model of choice is **U-Net++**, an advanced version of the U-Net architecture that uses nested and dense skip connections to capture features at finer scales. It is combined with a pre-trained **EfficientNet-B3** encoder to leverage the power of transfer learning.
+The model is based on **U-Net++**, an advanced U-Net with **nested and dense skip connections** for finer feature extraction.  
+It uses a **pre-trained EfficientNet-B3 encoder** to benefit from transfer learning.  
 
-  - **Loss Function**: A combination of **Binary Cross-Entropy (BCE)** and **Dice Loss** to ensure both pixel-level accuracy and correct overall shape segmentation.
-  - **Optimizer**: **Adam**.
-  - **Scheduler**: **CosineAnnealingLR** to dynamically adjust the learning rate during training.
+🔧 **Training Details**:  
+- **Loss Function**: BCE + Dice Loss  
+- **Optimizer**: Adam  
+- **Scheduler**: CosineAnnealingLR  
 
------
+---
 
-## Usage Workflow
+## ⚙️ Usage Workflow
 
-The entire pipeline is contained within the `Colonoscopy Polyp Segmentation.ipynb` Jupyter Notebook. The workflow is as follows:
+The workflow inside `Colonoscopy Polyp Segmentation.ipynb` includes:
 
-1.  **Import Dependencies**: Load all necessary libraries.
-2.  **Load Metadata**: Read the `kavsir_bboxes.json` file to get the list of filenames.
-3.  **Visualize Data**: Display a sample image and its ground truth mask to verify data integrity.
-4.  **Split Dataset**: Divide the filenames into training (70%), validation (15%), and test (15%) sets.
-5.  **Prepare Data Pipeline**:
-      - Define a custom PyTorch `Dataset` class.
-      - Create two `albumentations` pipelines: one for training with aggressive data augmentation and one for validation/testing.
-      - Instantiate `DataLoader`s to batch and shuffle the data.
-6.  **Define Model**: Create the U-Net++ model with the EfficientNet-B3 encoder and move it to the GPU if available.
-7.  **Configure Training**: Set up the combined loss function, Adam optimizer, and learning rate scheduler.
-8.  **Run Training**: Execute the main training loop, which iterates through epochs, calculates metrics, and saves the best model based on the validation Dice score.
-9.  **Evaluate Performance**: Plot the training/validation loss and Dice score charts to analyze the training process.
-10. **Test the Model**: Load the best saved model and evaluate its final performance on the unseen test set.
-11. **Visualize Predictions**: Display predictions on test images to qualitatively assess the model's performance.
+1. **Import Dependencies**  
+2. **Load Metadata** → from `kvasir_bboxes.json`  
+3. **Visualize Data** → images & masks  
+4. **Split Dataset** → train (70%) / val (15%) / test (15%)  
+5. **Prepare Data Pipeline** → custom Dataset, Albumentations, DataLoaders  
+6. **Define Model** → U-Net++ with EfficientNet-B3 encoder  
+7. **Configure Training** → loss, optimizer, scheduler  
+8. **Run Training** → train for multiple epochs, save best model  
+9. **Evaluate Performance** → plot training/validation curves  
+10. **Test Model** → evaluate on unseen test set  
+11. **Visualize Predictions** → compare input, ground truth, and predictions  
 
------
+---
 
-## Results
+## 📊 Results
 
-The model was trained for 25 epochs and achieved excellent performance on the held-out test set.
+After **30 epochs**, the model achieved:
 
-  - **Final Test Dice Score**: **0.91**
-  - **Final Test Loss**: **0.18**
+- **Final Test Dice Score**: 🎯 **0.92**  
+- **Final Test Loss**: 📉 **0.16**
 
-The training history shows a stable learning process, with the validation score closely tracking the training score, indicating a well-generalized model.
+**Training History**  
+![Training and Validation](assets/trainHistoryAndvalidationHistorychart.png)
 
-`Screenshot 2025-09-20 201813.png`
+**Sample Predictions**  
+![Model Predictions](assets/modelPredictionSample.png)
